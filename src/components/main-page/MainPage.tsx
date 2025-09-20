@@ -1,7 +1,11 @@
 import React from 'react';
 import PlaceCard from '../place-card';
 
-const MainPage: React.FC = () => {
+interface MainPageProps {
+  offersCount: number;
+}
+
+const MainPage: React.FC<MainPageProps> = ({ offersCount }) => {
   const places = [
     {
       id: 1,
@@ -128,7 +132,7 @@ const MainPage: React.FC = () => {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">312 places to stay in Amsterdam</b>
+              <b className="places__found">{offersCount} places to stay in Amsterdam</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -148,7 +152,6 @@ const MainPage: React.FC = () => {
                 {places.map((place) => (
                   <PlaceCard
                     key={place.id}
-                    id={place.id}
                     title={place.title}
                     type={place.type}
                     price={place.price}
