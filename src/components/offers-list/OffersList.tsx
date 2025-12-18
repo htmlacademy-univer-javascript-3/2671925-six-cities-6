@@ -18,7 +18,7 @@ const OffersList: React.FC<OffersListProps> = ({ offers }) => {
   };
 
   // activeOfferId will be used for map markers highlighting
-  console.log('Active offer:', activeOfferId);
+  void activeOfferId;
 
   return (
     <div className="cities__places-list places__list tabs__content">

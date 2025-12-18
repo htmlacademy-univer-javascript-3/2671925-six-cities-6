@@ -23,17 +23,27 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
     ? { width: 150, height: 110 }
     : { width: 260, height: 200 };
 
-  const cardClass = variant === 'favorites'
-    ? 'favorites__card place-card'
-    : variant === 'near-places'
-      ? 'near-places__card place-card'
-      : 'cities__card place-card';
+  const getCardClass = () => {
+    if (variant === 'favorites') {
+      return 'favorites__card place-card';
+    }
+    if (variant === 'near-places') {
+      return 'near-places__card place-card';
+    }
+    return 'cities__card place-card';
+  };
+  const cardClass = getCardClass();
 
-  const imageWrapperClass = variant === 'favorites'
-    ? 'favorites__image-wrapper place-card__image-wrapper'
-    : variant === 'near-places'
-      ? 'near-places__image-wrapper place-card__image-wrapper'
-      : 'cities__image-wrapper place-card__image-wrapper';
+  const getImageWrapperClass = () => {
+    if (variant === 'favorites') {
+      return 'favorites__image-wrapper place-card__image-wrapper';
+    }
+    if (variant === 'near-places') {
+      return 'near-places__image-wrapper place-card__image-wrapper';
+    }
+    return 'cities__image-wrapper place-card__image-wrapper';
+  };
+  const imageWrapperClass = getImageWrapperClass();
 
   const infoClass = variant === 'favorites'
     ? 'favorites__card-info place-card__info'
