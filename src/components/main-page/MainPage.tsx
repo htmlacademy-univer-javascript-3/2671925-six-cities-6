@@ -6,6 +6,7 @@ import { changeCity } from '../../store/action';
 import OffersList from '../offers-list';
 import Map from '../map';
 import CityList from '../city-list';
+import SortOptions, { SortOption } from '../sort-options';
 
 const CITY_LOCATIONS: Record<string, { name: string; location: { latitude: number; longitude: number; zoom: number } }> = {
   Amsterdam: {
@@ -57,20 +58,33 @@ const CITY_LOCATIONS: Record<string, { name: string; location: { latitude: numbe
     },
   },
 };
-const SORT_OPTIONS = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
-
 const MainPage: React.FC = () => {
   const dispatch = useDispatch();
   const activeCity = useSelector((state: RootState) => state.city);
   const offers = useSelector((state: RootState) => state.offers);
 
-  const [activeSortOption, setActiveSortOption] = useState('Popular');
-  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [activeSortOption, setActiveSortOption] = useState<SortOption>('Popular');
+  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
   const filteredOffers = offers.filter((offer) => offer.city === activeCity);
 
+  const sortedOffers = (() => {
+    switch (activeSortOption) {
+      case 'Price: low to high':
+        return filteredOffers.slice().sort((a, b) => a.price - b.price);
+      case 'Price: high to low':
+        return filteredOffers.slice().sort((a, b) => b.price - a.price);
+      case 'Top rated first':
+        return filteredOffers.slice().sort((a, b) => b.rating - a.rating);
+      case 'Popular':
+      default:
+        return filteredOffers;
+    }
+  })();
+
   const handleCityChange = (city: string) => {
     dispatch(changeCity(city));
+    setActiveOfferId(null);
   };
 
   return (
@@ -116,39 +130,12 @@ const MainPage: React.FC = () => {
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{filteredOffers.length} places to stay in {activeCity}</b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span
-                  className="places__sorting-type"
-                  tabIndex={0}
-                  onClick={() => setIsSortOpen(!isSortOpen)}
-                >
-                  {activeSortOption}
-                  <svg className="places__sorting-arrow" width="7" height="4">
-                    <use xlinkHref="#icon-arrow-select"></use>
-                  </svg>
-                </span>
-                <ul className={`places__options places__options--custom ${isSortOpen ? 'places__options--opened' : ''}`}>
-                  {SORT_OPTIONS.map((option) => (
-                    <li
-                      key={option}
-                      className={`places__option ${option === activeSortOption ? 'places__option--active' : ''}`}
-                      tabIndex={0}
-                      onClick={() => {
-                        setActiveSortOption(option);
-                        setIsSortOpen(false);
-                      }}
-                    >
-                      {option}
-                    </li>
-                  ))}
-                </ul>
-              </form>
-              <OffersList offers={filteredOffers} />
+              <SortOptions activeSortOption={activeSortOption} onChange={setActiveSortOption} />
+              <OffersList offers={sortedOffers} onActiveOfferChange={setActiveOfferId} />
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map offers={filteredOffers} city={CITY_LOCATIONS[activeCity]} />
+                <Map offers={sortedOffers} activeOfferId={activeOfferId} city={CITY_LOCATIONS[activeCity]} />
               </section>
             </div>
           </div>

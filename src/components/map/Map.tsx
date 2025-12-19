@@ -5,6 +5,7 @@ import { Offer } from '../../types';
 
 type MapProps = {
   offers: Offer[];
+  activeOfferId?: string | null;
   city: {
     name: string;
     location: {
@@ -16,12 +17,18 @@ type MapProps = {
 };
 
 const defaultCustomIcon = leaflet.icon({
-  iconUrl: 'img/pin.svg',
+  iconUrl: '/img/pin.svg',
   iconSize: [27, 39],
   iconAnchor: [13.5, 39],
 });
 
-const Map: React.FC<MapProps> = ({ offers, city }) => {
+const activeCustomIcon = leaflet.icon({
+  iconUrl: '/img/pin-active.svg',
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39],
+});
+
+const Map: React.FC<MapProps> = ({ offers, activeOfferId = null, city }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<leaflet.Map | null>(null);
   const markersRef = useRef<leaflet.Marker[]>([]);
@@ -62,6 +69,7 @@ const Map: React.FC<MapProps> = ({ offers, city }) => {
       markersRef.current = [];
 
       offers.forEach((offer) => {
+        const icon = offer.id === activeOfferId ? activeCustomIcon : defaultCustomIcon;
         const marker = leaflet
           .marker(
             {
@@ -69,14 +77,14 @@ const Map: React.FC<MapProps> = ({ offers, city }) => {
               lng: offer.location.longitude,
             },
             {
-              icon: defaultCustomIcon,
+              icon,
             }
           )
           .addTo(mapInstanceRef.current!);
         markersRef.current.push(marker);
       });
     }
-  }, [offers]);
+  }, [offers, activeOfferId]);
 
   return <div ref={mapRef} style={{ height: '100%' }}></div>;
 };
