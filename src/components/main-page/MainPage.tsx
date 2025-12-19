@@ -58,6 +58,8 @@ const CITY_LOCATIONS: Record<string, { name: string; location: { latitude: numbe
     },
   },
 };
+const SORT_OPTIONS = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
+
 const MainPage: React.FC = () => {
   const dispatch = useDispatch();
   const activeCity = useSelector((state: RootState) => state.city);
@@ -85,6 +87,13 @@ const MainPage: React.FC = () => {
   const handleCityChange = (city: string) => {
     dispatch(changeCity(city));
     setActiveOfferId(null);
+  const [activeSortOption, setActiveSortOption] = useState('Popular');
+  const [isSortOpen, setIsSortOpen] = useState(false);
+
+  const filteredOffers = offers.filter((offer) => offer.city === activeCity);
+
+  const handleCityChange = (city: string) => {
+    dispatch(changeCity(city));
   };
 
   return (
