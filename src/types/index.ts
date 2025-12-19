@@ -1,1 +1,1 @@
-export type { Offer, Location } from './offer';
+export type { Offer, Location, Review } from './offer';
