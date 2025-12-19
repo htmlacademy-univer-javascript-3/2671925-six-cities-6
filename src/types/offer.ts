@@ -1,3 +1,8 @@
+export type Location = {
+  latitude: number;
+  longitude: number;
+};
+
 export type Offer = {
   id: string;
   title: string;
@@ -7,6 +12,7 @@ export type Offer = {
   previewImage: string;
   images: string[];
   city: string;
+  location: Location;
   isPremium: boolean;
   isFavorite: boolean;
   bedrooms: number;
