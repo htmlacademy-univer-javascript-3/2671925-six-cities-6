@@ -17,6 +17,10 @@ export const offers: Offer[] = [
       'img/apartment-01.jpg',
     ],
     city: 'Amsterdam',
+    location: {
+      latitude: 52.3909553943508,
+      longitude: 4.85309666406198,
+    },
     isPremium: true,
     isFavorite: false,
     bedrooms: 3,
@@ -42,6 +46,10 @@ export const offers: Offer[] = [
       'img/apartment-02.jpg',
     ],
     city: 'Amsterdam',
+    location: {
+      latitude: 52.3609553943508,
+      longitude: 4.85309666406198,
+    },
     isPremium: false,
     isFavorite: true,
     bedrooms: 1,
@@ -67,6 +75,10 @@ export const offers: Offer[] = [
       'img/studio-01.jpg',
     ],
     city: 'Amsterdam',
+    location: {
+      latitude: 52.3909553943508,
+      longitude: 4.929309666406198,
+    },
     isPremium: false,
     isFavorite: false,
     bedrooms: 2,
@@ -77,7 +89,7 @@ export const offers: Offer[] = [
       avatarUrl: 'img/avatar-angelina.jpg',
       isPro: true,
     },
-    description: 'A quiet cozy and picturesque that hides behind a river by the unique lightness of Amsterdam.',
+    description: 'A quiet cozy and picturesque that hides behind a river by the unique lightness of Amsterdam',
   },
   {
     id: '4',
@@ -93,6 +105,10 @@ export const offers: Offer[] = [
       'img/apartment-02.jpg',
     ],
     city: 'Cologne',
+    location: {
+      latitude: 52.3809553943508,
+      longitude: 4.939309666406198,
+    },
     isPremium: true,
     isFavorite: true,
     bedrooms: 4,

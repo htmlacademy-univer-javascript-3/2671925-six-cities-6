@@ -2,8 +2,60 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types';
 import OffersList from '../offers-list';
+import Map from '../map';
 
 const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+
+const CITY_LOCATIONS: Record<string, { name: string; location: { latitude: number; longitude: number; zoom: number } }> = {
+  Amsterdam: {
+    name: 'Amsterdam',
+    location: {
+      latitude: 52.37454,
+      longitude: 4.897976,
+      zoom: 12,
+    },
+  },
+  Paris: {
+    name: 'Paris',
+    location: {
+      latitude: 48.85661,
+      longitude: 2.351499,
+      zoom: 12,
+    },
+  },
+  Cologne: {
+    name: 'Cologne',
+    location: {
+      latitude: 50.938361,
+      longitude: 6.959974,
+      zoom: 12,
+    },
+  },
+  Brussels: {
+    name: 'Brussels',
+    location: {
+      latitude: 50.846557,
+      longitude: 4.351697,
+      zoom: 12,
+    },
+  },
+  Hamburg: {
+    name: 'Hamburg',
+    location: {
+      latitude: 53.550341,
+      longitude: 10.000654,
+      zoom: 12,
+    },
+  },
+  Dusseldorf: {
+    name: 'Dusseldorf',
+    location: {
+      latitude: 51.225402,
+      longitude: 6.776314,
+      zoom: 12,
+    },
+  },
+};
 const SORT_OPTIONS = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
 
 interface MainPageProps {
@@ -106,7 +158,9 @@ const MainPage: React.FC<MainPageProps> = ({ offers }) => {
               <OffersList offers={filteredOffers} />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className="cities__map map">
+                <Map offers={filteredOffers} city={CITY_LOCATIONS[activeCity]} />
+              </section>
             </div>
           </div>
         </div>
