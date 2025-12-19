@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Offer } from '../../types';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store';
+import { changeCity } from '../../store/action';
 import OffersList from '../offers-list';
 import Map from '../map';
-
-const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+import CityList from '../city-list';
 
 const CITY_LOCATIONS: Record<string, { name: string; location: { latitude: number; longitude: number; zoom: number } }> = {
   Amsterdam: {
@@ -58,16 +59,19 @@ const CITY_LOCATIONS: Record<string, { name: string; location: { latitude: numbe
 };
 const SORT_OPTIONS = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
 
-interface MainPageProps {
-  offers: Offer[];
-}
+const MainPage: React.FC = () => {
+  const dispatch = useDispatch();
+  const activeCity = useSelector((state: RootState) => state.city);
+  const offers = useSelector((state: RootState) => state.offers);
 
-const MainPage: React.FC<MainPageProps> = ({ offers }) => {
-  const [activeCity, setActiveCity] = useState('Amsterdam');
   const [activeSortOption, setActiveSortOption] = useState('Popular');
   const [isSortOpen, setIsSortOpen] = useState(false);
 
   const filteredOffers = offers.filter((offer) => offer.city === activeCity);
+
+  const handleCityChange = (city: string) => {
+    dispatch(changeCity(city));
+  };
 
   return (
     <div className="page page--gray page--main">
@@ -104,22 +108,7 @@ const MainPage: React.FC<MainPageProps> = ({ offers }) => {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <ul className="locations__list tabs__list">
-              {CITIES.map((city) => (
-                <li key={city} className="locations__item">
-                  <a
-                    className={`locations__item-link tabs__item ${city === activeCity ? 'tabs__item--active' : ''}`}
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setActiveCity(city);
-                    }}
-                  >
-                    <span>{city}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <CityList activeCity={activeCity} onCityChange={handleCityChange} />
           </section>
         </div>
         <div className="cities">
