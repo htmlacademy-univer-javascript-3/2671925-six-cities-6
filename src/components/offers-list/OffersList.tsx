@@ -1,24 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Offer } from '../../types';
 import PlaceCard from '../place-card';
 
 interface OffersListProps {
   offers: Offer[];
+  onActiveOfferChange?: (offerId: string | null) => void;
 }
 
-const OffersList: React.FC<OffersListProps> = ({ offers }) => {
-  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
-
+const OffersList: React.FC<OffersListProps> = ({ offers, onActiveOfferChange }) => {
   const handleCardMouseEnter = (offerId: string) => {
-    setActiveOfferId(offerId);
+    onActiveOfferChange?.(offerId);
   };
 
   const handleCardMouseLeave = () => {
-    setActiveOfferId(null);
+    onActiveOfferChange?.(null);
   };
-
-  // activeOfferId will be used for map markers highlighting
-  void activeOfferId;
 
   return (
     <div className="cities__places-list places__list tabs__content">
