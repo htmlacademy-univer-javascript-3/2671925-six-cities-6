@@ -3,6 +3,17 @@ export type Location = {
   longitude: number;
 };
 
+export type Review = {
+  id: string;
+  user: {
+    name: string;
+    avatarUrl: string;
+  };
+  rating: number;
+  comment: string;
+  date: string;
+};
+
 export type Offer = {
   id: string;
   title: string;
