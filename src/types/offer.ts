@@ -17,6 +17,12 @@ export type AuthData = {
   password: string;
 };
 
+export type CommentData = {
+  offerId: string;
+  comment: string;
+  rating: number;
+};
+
 export type Location = {
   latitude: number;
   longitude: number;

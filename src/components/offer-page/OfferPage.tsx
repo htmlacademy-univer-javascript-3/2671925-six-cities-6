@@ -1,64 +1,50 @@
-import React from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Offer, Review } from '../../types';
+import React, { useEffect } from 'react';
+import { useParams, Navigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../store';
+import { AuthorizationStatus } from '../../types';
+import { fetchOfferAction, fetchNearbyOffersAction, fetchCommentsAction } from '../../store/api-actions';
 import ReviewForm from '../review-form';
 import ReviewsList from '../reviews-list';
 import PlaceCard from '../place-card';
 import Map from '../map';
+import Header from '../header';
+import Spinner from '../spinner';
 
-interface OfferPageProps {
-  offers: Offer[];
-}
-
-const AMSTERDAM_CITY = {
-  name: 'Amsterdam',
-  location: {
-    latitude: 52.3909553943508,
-    longitude: 4.85309666406198,
-    zoom: 13,
-  },
-};
-
-const OfferPage: React.FC<OfferPageProps> = ({ offers }) => {
-  const reviews: Review[] = [];
+const OfferPage: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const { id } = useParams<{ id: string }>();
-  const offer = offers.find((o) => o.id === id);
-  const nearbyOffers = offers.filter((o) => o.id !== id).slice(0, 3);
+
+  const offer = useSelector((state: RootState) => state.currentOffer);
+  const nearbyOffers = useSelector((state: RootState) => state.nearbyOffers);
+  const comments = useSelector((state: RootState) => state.comments);
+  const isOfferLoading = useSelector((state: RootState) => state.isOfferLoading);
+  const isOfferNotFound = useSelector((state: RootState) => state.isOfferNotFound);
+  const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchOfferAction(id));
+      dispatch(fetchNearbyOffersAction(id));
+      dispatch(fetchCommentsAction(id));
+    }
+  }, [dispatch, id]);
+
+  if (isOfferLoading) {
+    return <Spinner />;
+  }
+
+  if (isOfferNotFound) {
+    return <Navigate to="/404" />;
+  }
 
   if (!offer) {
-    return <div>Offer not found</div>;
+    return <Spinner />;
   }
 
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Link className="header__logo-link" to="/">
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-              </Link>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <Link className="header__nav-link header__nav-link--profile" to="/favorites">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <span className="header__favorite-count">3</span>
-                  </Link>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="page__main page__main--offer">
         <section className="offer">
@@ -143,13 +129,15 @@ const OfferPage: React.FC<OfferPageProps> = ({ offers }) => {
                 </div>
               </div>
               <section className="offer__reviews reviews">
-                <ReviewsList reviews={reviews} />
-                <ReviewForm />
+                <ReviewsList reviews={comments} />
+                {authorizationStatus === AuthorizationStatus.Auth && (
+                  <ReviewForm offerId={offer.id} />
+                )}
               </section>
             </div>
           </div>
           <section className="offer__map map">
-            <Map offers={nearbyOffers} city={AMSTERDAM_CITY} />
+            <Map offers={nearbyOffers} city={offer.city} activeOfferId={offer.id} />
           </section>
         </section>
         <div className="container">
