@@ -8,7 +8,6 @@ import Map from '../map';
 
 interface OfferPageProps {
   offers: Offer[];
-  reviews: Review[];
 }
 
 const AMSTERDAM_CITY = {
@@ -20,7 +19,8 @@ const AMSTERDAM_CITY = {
   },
 };
 
-const OfferPage: React.FC<OfferPageProps> = ({ offers, reviews }) => {
+const OfferPage: React.FC<OfferPageProps> = ({ offers }) => {
+  const reviews: Review[] = [];
   const { id } = useParams<{ id: string }>();
   const offer = offers.find((o) => o.id === id);
   const nearbyOffers = offers.filter((o) => o.id !== id).slice(0, 3);
@@ -64,7 +64,7 @@ const OfferPage: React.FC<OfferPageProps> = ({ offers, reviews }) => {
         <section className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              {offer.images.slice(0, 6).map((image) => (
+              {(offer.images ?? []).slice(0, 6).map((image) => (
                 <div key={image} className="offer__image-wrapper">
                   <img className="offer__image" src={image} alt="Photo studio" />
                 </div>
@@ -101,10 +101,10 @@ const OfferPage: React.FC<OfferPageProps> = ({ offers, reviews }) => {
                   {offer.type}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
-                  {offer.bedrooms} Bedroom{offer.bedrooms > 1 ? 's' : ''}
+                  {offer.bedrooms} Bedroom{(offer.bedrooms ?? 0) > 1 ? 's' : ''}
                 </li>
                 <li className="offer__feature offer__feature--adults">
-                Max {offer.maxAdults} adult{offer.maxAdults > 1 ? 's' : ''}
+                Max {offer.maxAdults} adult{(offer.maxAdults ?? 0) > 1 ? 's' : ''}
                 </li>
               </ul>
               <div className="offer__price">
@@ -114,7 +114,7 @@ const OfferPage: React.FC<OfferPageProps> = ({ offers, reviews }) => {
               <div className="offer__inside">
                 <h2 className="offer__inside-title">What&apos;s inside</h2>
                 <ul className="offer__inside-list">
-                  {offer.goods.map((good) => (
+                  {(offer.goods ?? []).map((good) => (
                     <li key={good} className="offer__inside-item">
                       {good}
                     </li>
@@ -124,13 +124,13 @@ const OfferPage: React.FC<OfferPageProps> = ({ offers, reviews }) => {
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>
                 <div className="offer__host-user user">
-                  <div className={`offer__avatar-wrapper ${offer.host.isPro ? 'offer__avatar-wrapper--pro' : ''} user__avatar-wrapper`}>
-                    <img className="offer__avatar user__avatar" src={offer.host.avatarUrl} width="74" height="74" alt="Host avatar" />
+                  <div className={`offer__avatar-wrapper ${offer.host?.isPro ? 'offer__avatar-wrapper--pro' : ''} user__avatar-wrapper`}>
+                    <img className="offer__avatar user__avatar" src={offer.host?.avatarUrl} width="74" height="74" alt="Host avatar" />
                   </div>
                   <span className="offer__user-name">
-                    {offer.host.name}
+                    {offer.host?.name}
                   </span>
-                  {offer.host.isPro && (
+                  {offer.host?.isPro && (
                     <span className="offer__user-status">
                     Pro
                     </span>
