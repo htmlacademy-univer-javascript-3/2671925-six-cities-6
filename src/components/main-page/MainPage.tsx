@@ -58,7 +58,6 @@ const CITY_LOCATIONS: Record<string, { name: string; location: { latitude: numbe
     },
   },
 };
-const SORT_OPTIONS = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
 
 const MainPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -68,7 +67,7 @@ const MainPage: React.FC = () => {
   const [activeSortOption, setActiveSortOption] = useState<SortOption>('Popular');
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
-  const filteredOffers = offers.filter((offer) => offer.city === activeCity);
+  const filteredOffers = offers.filter((offer) => offer.city.name === activeCity);
 
   const sortedOffers = (() => {
     switch (activeSortOption) {
@@ -87,13 +86,6 @@ const MainPage: React.FC = () => {
   const handleCityChange = (city: string) => {
     dispatch(changeCity(city));
     setActiveOfferId(null);
-  const [activeSortOption, setActiveSortOption] = useState('Popular');
-  const [isSortOpen, setIsSortOpen] = useState(false);
-
-  const filteredOffers = offers.filter((offer) => offer.city === activeCity);
-
-  const handleCityChange = (city: string) => {
-    dispatch(changeCity(city));
   };
 
   return (
