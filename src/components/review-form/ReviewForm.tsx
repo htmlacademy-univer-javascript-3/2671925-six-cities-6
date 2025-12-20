@@ -1,8 +1,17 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store';
+import { postCommentAction } from '../../store/api-actions';
 
-const ReviewForm: React.FC = () => {
+interface ReviewFormProps {
+  offerId: string;
+}
+
+const ReviewForm: React.FC<ReviewFormProps> = ({ offerId }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleRatingChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setRating(Number(evt.target.value));
@@ -14,9 +23,21 @@ const ReviewForm: React.FC = () => {
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+
+    if (rating && review) {
+      setIsSubmitting(true);
+      dispatch(postCommentAction({ offerId, comment: review, rating }))
+        .then(() => {
+          setRating(0);
+          setReview('');
+        })
+        .finally(() => {
+          setIsSubmitting(false);
+        });
+    }
   };
 
-  const isSubmitDisabled = rating === 0 || review.length < 50;
+  const isSubmitDisabled = rating === 0 || review.length < 50 || review.length > 300 || isSubmitting;
 
   return (
     <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
