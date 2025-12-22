@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { Offer } from '../../types';
 import PlaceCard from '../place-card';
 
@@ -8,13 +8,13 @@ interface OffersListProps {
 }
 
 const OffersList: React.FC<OffersListProps> = ({ offers, onActiveOfferChange }) => {
-  const handleCardMouseEnter = (offerId: string) => {
+  const handleCardMouseEnter = useCallback((offerId: string) => {
     onActiveOfferChange?.(offerId);
-  };
+  }, [onActiveOfferChange]);
 
-  const handleCardMouseLeave = () => {
+  const handleCardMouseLeave = useCallback(() => {
     onActiveOfferChange?.(null);
-  };
+  }, [onActiveOfferChange]);
 
   return (
     <div className="cities__places-list places__list tabs__content">
@@ -31,4 +31,6 @@ const OffersList: React.FC<OffersListProps> = ({ offers, onActiveOfferChange }) 
   );
 };
 
-export default OffersList;
+const MemoizedOffersList = memo(OffersList);
+
+export default MemoizedOffersList;

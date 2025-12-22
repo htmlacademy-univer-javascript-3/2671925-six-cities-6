@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store';
+import { selectCity, selectOffersByCity } from '../../store/selectors';
 import { changeCity } from '../../store/action';
 import OffersList from '../offers-list';
 import Map from '../map';
@@ -61,15 +61,13 @@ const CITY_LOCATIONS: Record<string, { name: string; location: { latitude: numbe
 
 const MainPage: React.FC = () => {
   const dispatch = useDispatch();
-  const activeCity = useSelector((state: RootState) => state.city);
-  const offers = useSelector((state: RootState) => state.offers);
+  const activeCity = useSelector(selectCity);
+  const filteredOffers = useSelector(selectOffersByCity);
 
   const [activeSortOption, setActiveSortOption] = useState<SortOption>('Popular');
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
-  const filteredOffers = offers.filter((offer) => offer.city.name === activeCity);
-
-  const sortedOffers = (() => {
+  const sortedOffers = useMemo(() => {
     switch (activeSortOption) {
       case 'Price: low to high':
         return filteredOffers.slice().sort((a, b) => a.price - b.price);
@@ -81,12 +79,12 @@ const MainPage: React.FC = () => {
       default:
         return filteredOffers;
     }
-  })();
+  }, [filteredOffers, activeSortOption]);
 
-  const handleCityChange = (city: string) => {
+  const handleCityChange = useCallback((city: string) => {
     dispatch(changeCity(city));
     setActiveOfferId(null);
-  };
+  }, [dispatch]);
 
   return (
     <div className="page page--gray page--main">

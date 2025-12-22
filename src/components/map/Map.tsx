@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, memo } from 'react';
 import leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Offer } from '../../types';
@@ -91,4 +91,6 @@ const Map: React.FC<MapProps> = ({ offers, activeOfferId = null, city }) => {
   return <div ref={mapRef} style={{ height: '100%' }}></div>;
 };
 
-export default Map;
+const MemoizedMap = memo(Map);
+
+export default MemoizedMap;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types';
 
@@ -49,13 +49,13 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
     ? 'favorites__card-info place-card__info'
     : 'place-card__info';
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = useCallback(() => {
     onMouseEnter?.(id);
-  };
+  }, [id, onMouseEnter]);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     onMouseLeave?.();
-  };
+  }, [onMouseLeave]);
 
   return (
     <article
@@ -104,4 +104,6 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
   );
 };
 
-export default PlaceCard;
+const MemoizedPlaceCard = memo(PlaceCard);
+
+export default MemoizedPlaceCard;

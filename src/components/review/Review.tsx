@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { Review as ReviewType } from '../../types';
 
 interface ReviewProps {
   review: ReviewType;
 }
 
+const formatDate = (dateString: string) => {
+  const dateObj = new Date(dateString);
+  return dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+};
+
 const Review: React.FC<ReviewProps> = ({ review }) => {
   const { user, rating, comment, date } = review;
 
-  const formatDate = (dateString: string) => {
-    const dateObj = new Date(dateString);
-    return dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  };
+  const formattedDate = useMemo(() => formatDate(date), [date]);
 
   return (
     <li className="reviews__item">
@@ -33,10 +35,12 @@ const Review: React.FC<ReviewProps> = ({ review }) => {
         <p className="reviews__text">
           {comment}
         </p>
-        <time className="reviews__time" dateTime={date}>{formatDate(date)}</time>
+        <time className="reviews__time" dateTime={date}>{formattedDate}</time>
       </div>
     </li>
   );
 };
 
-export default Review;
+const MemoizedReview = memo(Review);
+
+export default MemoizedReview;

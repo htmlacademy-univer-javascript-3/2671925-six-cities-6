@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Review as ReviewType } from '../../types';
 import Review from '../review';
 
@@ -17,4 +17,6 @@ const ReviewsList: React.FC<ReviewsListProps> = ({ reviews }) => (
   </>
 );
 
-export default ReviewsList;
+const MemoizedReviewsList = memo(ReviewsList);
+
+export default MemoizedReviewsList;
