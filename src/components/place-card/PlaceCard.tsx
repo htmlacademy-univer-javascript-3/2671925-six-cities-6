@@ -1,6 +1,10 @@
 import React, { memo, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { Offer } from '../../types';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Offer, AuthorizationStatus } from '../../types';
+import { AppDispatch } from '../../store';
+import { toggleFavoriteAction } from '../../store/api-actions';
+import { selectAuthorizationStatus } from '../../store/selectors';
 
 type PlaceCardVariant = 'cities' | 'favorites' | 'near-places';
 
@@ -17,6 +21,9 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const authorizationStatus = useSelector(selectAuthorizationStatus);
   const { id, title, type, price, rating, previewImage, isPremium, isFavorite } = offer;
 
   const imageSize = variant === 'favorites'
@@ -57,6 +64,17 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
     onMouseLeave?.();
   }, [onMouseLeave]);
 
+  const handleFavoriteClick = useCallback(() => {
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      navigate('/login');
+      return;
+    }
+    dispatch(toggleFavoriteAction({
+      offerId: id,
+      status: isFavorite ? 0 : 1,
+    }));
+  }, [authorizationStatus, dispatch, id, isFavorite, navigate]);
+
   return (
     <article
       className={cardClass}
@@ -82,6 +100,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
           <button
             className={`place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`}
             type="button"
+            onClick={handleFavoriteClick}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>

@@ -99,7 +99,7 @@ const MainPage: React.FC = () => {
           </section>
         </div>
         <div className="cities">
-          {filteredOffers.length !== 0 ? (
+          {filteredOffers.length === 0 ? (
             <MainEmpty city={activeCity} />
           ) : (
             <div className="cities__places-container container">
