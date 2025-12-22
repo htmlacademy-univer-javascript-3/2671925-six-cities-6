@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo, useCallback } from 'react';
 
 import { SORT_OPTIONS, SortOption } from './constants';
 
@@ -10,13 +10,22 @@ type SortOptionsProps = {
 const SortOptions: React.FC<SortOptionsProps> = ({ activeSortOption, onChange }) => {
   const [isSortOpen, setIsSortOpen] = useState(false);
 
+  const handleToggle = useCallback(() => {
+    setIsSortOpen((prev) => !prev);
+  }, []);
+
+  const handleOptionClick = useCallback((option: SortOption) => {
+    onChange(option);
+    setIsSortOpen(false);
+  }, [onChange]);
+
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
       <span
         className="places__sorting-type"
         tabIndex={0}
-        onClick={() => setIsSortOpen(!isSortOpen)}
+        onClick={handleToggle}
       >
         {activeSortOption}
         <svg className="places__sorting-arrow" width="7" height="4">
@@ -29,10 +38,7 @@ const SortOptions: React.FC<SortOptionsProps> = ({ activeSortOption, onChange })
             key={option}
             className={`places__option ${option === activeSortOption ? 'places__option--active' : ''}`}
             tabIndex={0}
-            onClick={() => {
-              onChange(option);
-              setIsSortOpen(false);
-            }}
+            onClick={() => handleOptionClick(option)}
           >
             {option}
           </li>
@@ -42,4 +48,6 @@ const SortOptions: React.FC<SortOptionsProps> = ({ activeSortOption, onChange })
   );
 };
 
-export default SortOptions;
+const MemoizedSortOptions = memo(SortOptions);
+
+export default MemoizedSortOptions;

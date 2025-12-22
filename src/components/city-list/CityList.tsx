@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { memo } from 'react';
+import CityItem from './CityItem';
 
 const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
@@ -10,20 +11,15 @@ interface CityListProps {
 const CityList: React.FC<CityListProps> = ({ activeCity, onCityChange }) => (
   <ul className="locations__list tabs__list">
     {CITIES.map((city) => (
-      <li key={city} className="locations__item">
-        <a
-          className={`locations__item-link tabs__item ${city === activeCity ? 'tabs__item--active' : ''}`}
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            onCityChange(city);
-          }}
-        >
-          <span>{city}</span>
-        </a>
-      </li>
+      <CityItem
+        key={city}
+        city={city}
+        isActive={city === activeCity}
+        onClick={onCityChange}
+      />
     ))}
   </ul>
 );
 
-export default CityList;
+const MemoizedCityList = memo(CityList);
+export default MemoizedCityList;
