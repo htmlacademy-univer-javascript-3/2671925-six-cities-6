@@ -7,6 +7,7 @@ import Map from '../map';
 import CityList from '../city-list';
 import SortOptions, { SortOption } from '../sort-options';
 import Header from '../header';
+import MainEmpty from '../main-empty';
 
 const CITY_LOCATIONS: Record<string, { name: string; location: { latitude: number; longitude: number; zoom: number } }> = {
   Amsterdam: {
@@ -90,7 +91,7 @@ const MainPage: React.FC = () => {
     <div className="page page--gray page--main">
       <Header />
 
-      <main className="page__main page__main--index">
+      <main className={`page__main page__main--index${filteredOffers.length === 0 ? ' page__main--index-empty' : ''}`}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
@@ -98,19 +99,23 @@ const MainPage: React.FC = () => {
           </section>
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{filteredOffers.length} places to stay in {activeCity}</b>
-              <SortOptions activeSortOption={activeSortOption} onChange={setActiveSortOption} />
-              <OffersList offers={sortedOffers} onActiveOfferChange={setActiveOfferId} />
-            </section>
-            <div className="cities__right-section">
-              <section className="cities__map map">
-                <Map offers={sortedOffers} activeOfferId={activeOfferId} city={CITY_LOCATIONS[activeCity]} />
+          {filteredOffers.length === 0 ? (
+            <MainEmpty city={activeCity} />
+          ) : (
+            <div className="cities__places-container container">
+              <section className="cities__places places">
+                <h2 className="visually-hidden">Places</h2>
+                <b className="places__found">{filteredOffers.length} places to stay in {activeCity}</b>
+                <SortOptions activeSortOption={activeSortOption} onChange={setActiveSortOption} />
+                <OffersList offers={sortedOffers} onActiveOfferChange={setActiveOfferId} />
               </section>
+              <div className="cities__right-section">
+                <section className="cities__map map">
+                  <Map offers={sortedOffers} activeOfferId={activeOfferId} city={CITY_LOCATIONS[activeCity]} />
+                </section>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </main>
     </div>
