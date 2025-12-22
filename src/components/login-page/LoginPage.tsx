@@ -1,14 +1,19 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useMemo } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { selectAuthorizationStatus } from '../../store/selectors';
 import { loginAction } from '../../store/api-actions';
+import { changeCity } from '../../store/slices';
 import { AuthorizationStatus } from '../../types';
+
+const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const authorizationStatus = useSelector(selectAuthorizationStatus);
+
+  const randomCity = useMemo(() => CITIES[Math.floor(Math.random() * CITIES.length)], []);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -73,9 +78,13 @@ const LoginPage: React.FC = () => {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
-              </a>
+              <Link
+                className="locations__item-link"
+                to="/"
+                onClick={() => dispatch(changeCity(randomCity))}
+              >
+                <span>{randomCity}</span>
+              </Link>
             </div>
           </section>
         </div>
