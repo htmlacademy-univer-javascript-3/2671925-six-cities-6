@@ -7,7 +7,7 @@ interface CityItemProps {
 }
 
 const CityItem: React.FC<CityItemProps> = memo(({ city, isActive, onClick }) => {
-  const handleClick = useCallback((e: React.MouseEvent) => {
+  const handleCityClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     onClick(city);
   }, [city, onClick]);
@@ -17,7 +17,7 @@ const CityItem: React.FC<CityItemProps> = memo(({ city, isActive, onClick }) => 
       <a
         className={`locations__item-link tabs__item ${isActive ? 'tabs__item--active' : ''}`}
         href="#"
-        onClick={handleClick}
+        onClick={handleCityClick}
       >
         <span>{city}</span>
       </a>

@@ -18,6 +18,7 @@ import PlaceCard from '../../components/place-card';
 import Map from '../../components/map';
 import Header from '../../components/header';
 import Spinner from '../../components/spinner';
+import { OfferConfig, Rating } from '../../const';
 
 const OfferPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,9 +34,9 @@ const OfferPage: React.FC = () => {
 
   const mapOffers = useMemo(() => {
     if (!offer) {
-      return nearbyOffers.slice(0, 3);
+      return nearbyOffers.slice(0, OfferConfig.MaxNearbyOffers);
     }
-    return [...nearbyOffers.slice(0, 3), offer];
+    return [...nearbyOffers.slice(0, OfferConfig.MaxNearbyOffers), offer];
   }, [offer, nearbyOffers]);
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const OfferPage: React.FC = () => {
     }
   }, [dispatch, id]);
 
-  const handleFavoriteClick = () => {
+  const handleBookmarkButtonClick = () => {
     if (authorizationStatus !== AuthorizationStatus.Auth) {
       navigate('/login');
       return;
@@ -79,7 +80,7 @@ const OfferPage: React.FC = () => {
         <section className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              {(offer.images ?? []).slice(0, 6).map((image) => (
+              {(offer.images ?? []).slice(0, OfferConfig.MaxGalleryImages).map((image) => (
                 <div key={image} className="offer__image-wrapper">
                   <img className="offer__image" src={image} alt="Photo studio" />
                 </div>
@@ -97,7 +98,7 @@ const OfferPage: React.FC = () => {
                 <h1 className="offer__name">
                   {offer.title}
                 </h1>
-                <button className={`offer__bookmark-button button ${offer.isFavorite ? 'offer__bookmark-button--active' : ''}`} type="button" onClick={handleFavoriteClick}>
+                <button className={`offer__bookmark-button button ${offer.isFavorite ? 'offer__bookmark-button--active' : ''}`} type="button" onClick={handleBookmarkButtonClick}>
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -106,7 +107,7 @@ const OfferPage: React.FC = () => {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{width: `${Math.round(offer.rating) * 20}%`}}></span>
+                  <span style={{width: `${Math.round(offer.rating) * Rating.PercentPerStar}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{offer.rating}</span>

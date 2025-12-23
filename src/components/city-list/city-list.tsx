@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import CityItem from './city-item';
-
-const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+import { CITIES } from '../../const';
 
 interface CityListProps {
   activeCity: string;

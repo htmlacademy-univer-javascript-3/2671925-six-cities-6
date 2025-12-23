@@ -5,6 +5,7 @@ import { Offer, AuthorizationStatus } from '../../types';
 import { AppDispatch } from '../../store';
 import { toggleFavoriteAction } from '../../store/api-actions';
 import { selectAuthorizationStatus } from '../../store/selectors';
+import { Rating } from '../../const';
 
 type PlaceCardVariant = 'cities' | 'favorites' | 'near-places';
 
@@ -64,7 +65,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
     onMouseLeave?.();
   }, [onMouseLeave]);
 
-  const handleFavoriteClick = useCallback(() => {
+  const handleBookmarkButtonClick = useCallback(() => {
     if (authorizationStatus !== AuthorizationStatus.Auth) {
       navigate('/login');
       return;
@@ -73,7 +74,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
       offerId: id,
       status: isFavorite ? 0 : 1,
     }));
-  }, [authorizationStatus, dispatch, id, isFavorite, navigate]);
+  }, [authorizationStatus, dispatch, navigate, id, isFavorite]);
 
   return (
     <article
@@ -100,7 +101,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
           <button
             className={`place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`}
             type="button"
-            onClick={handleFavoriteClick}
+            onClick={handleBookmarkButtonClick}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
@@ -110,7 +111,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${Math.round(rating) * 20}%`}}></span>
+            <span style={{width: `${Math.round(rating) * Rating.PercentPerStar}%`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

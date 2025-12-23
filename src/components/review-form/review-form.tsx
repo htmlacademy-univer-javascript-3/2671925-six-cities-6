@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { postCommentAction } from '../../store/api-actions';
+import { ReviewLength } from '../../const';
 
 interface ReviewFormProps {
   offerId: string;
@@ -22,7 +23,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ offerId }) => {
     setReview(evt.target.value);
   };
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     if (rating && review) {
@@ -43,10 +44,10 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ offerId }) => {
     }
   };
 
-  const isSubmitDisabled = rating === 0 || review.length < 50 || review.length > 300 || isSubmitting;
+  const isSubmitDisabled = rating === 0 || review.length < ReviewLength.Min || review.length > ReviewLength.Max || isSubmitting;
 
   return (
-    <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
+    <form className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit}>
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
         <input
