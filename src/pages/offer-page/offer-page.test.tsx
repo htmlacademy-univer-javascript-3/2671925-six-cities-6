@@ -35,7 +35,7 @@ const createMockOffersSlice = () => ({
   isOffersLoading: false,
 });
 
-const createMockUserSlice = (authStatus: AuthorizationStatus, user = null) => ({
+const createMockUserSlice = (authStatus: AuthorizationStatus, user: { name: string; avatarUrl: string; isPro: boolean; email: string; token: string } | null = null) => ({
   authorizationStatus: authStatus,
   user,
 });
