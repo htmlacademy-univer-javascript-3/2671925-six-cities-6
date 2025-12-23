@@ -14,7 +14,7 @@ const CityList: React.FC<CityListProps> = ({ activeCity, onCityChange }) => (
         key={city}
         city={city}
         isActive={city === activeCity}
-        onClick={onCityChange}
+        onCityClick={onCityChange}
       />
     ))}
   </ul>
