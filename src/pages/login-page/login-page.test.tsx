@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import LoginPage from './LoginPage';
+import LoginPage from './login-page';
 import { userReducer, offersReducer } from '../../store/slices';
 import { AuthorizationStatus } from '../../types';
 
@@ -151,5 +151,62 @@ describe('LoginPage Component', () => {
       )
     );
     expect(cityLink).toBeInTheDocument();
+  });
+
+  it('should show error when password has only letters', async () => {
+    const store = createMockStore();
+    const user = userEvent.setup();
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <LoginPage />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    await user.type(screen.getByPlaceholderText('Email'), 'test@test.com');
+    await user.type(screen.getByPlaceholderText('Password'), 'password');
+    await user.click(screen.getByRole('button', { name: 'Sign in' }));
+
+    expect(screen.getByText('Password must contain at least one letter and one digit')).toBeInTheDocument();
+  });
+
+  it('should show error when password has only digits', async () => {
+    const store = createMockStore();
+    const user = userEvent.setup();
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <LoginPage />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    await user.type(screen.getByPlaceholderText('Email'), 'test@test.com');
+    await user.type(screen.getByPlaceholderText('Password'), '123456');
+    await user.click(screen.getByRole('button', { name: 'Sign in' }));
+
+    expect(screen.getByText('Password must contain at least one letter and one digit')).toBeInTheDocument();
+  });
+
+  it('should not show error when password has both letter and digit', async () => {
+    const store = createMockStore();
+    const user = userEvent.setup();
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <LoginPage />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    await user.type(screen.getByPlaceholderText('Email'), 'test@test.com');
+    await user.type(screen.getByPlaceholderText('Password'), 'password1');
+    await user.click(screen.getByRole('button', { name: 'Sign in' }));
+
+    expect(screen.queryByText('Password must contain at least one letter and one digit')).not.toBeInTheDocument();
   });
 });

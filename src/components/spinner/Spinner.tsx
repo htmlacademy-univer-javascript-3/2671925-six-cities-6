@@ -27,7 +27,7 @@ const Spinner: React.FC = () => (
         }
       `}
     </style>
-    <div style={spinnerStyle}>
+    <div style={spinnerStyle} data-testid="spinner">
       <div style={loaderStyle}></div>
     </div>
   </>

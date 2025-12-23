@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import ReviewsList from './ReviewsList';
+import ReviewsList from './reviews-list';
 import { Review } from '../../types';
 
 const mockReviews: Review[] = [

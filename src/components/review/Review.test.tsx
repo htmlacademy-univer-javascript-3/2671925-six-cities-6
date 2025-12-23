@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import Review from './Review';
+import Review from './review';
 import { Review as ReviewType } from '../../types';
 
 const mockReview: ReviewType = {

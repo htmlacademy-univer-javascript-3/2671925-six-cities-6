@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from './private-route';
 import { userReducer } from '../../store/slices';
 import { AuthorizationStatus } from '../../types';
 

@@ -1,8 +1,8 @@
 import React, { memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types';
-import PlaceCard from '../place-card';
-import Header from '../header';
+import PlaceCard from '../../components/place-card';
+import Header from '../../components/header';
 
 interface FavoritesPageProps {
   offers: Offer[];
