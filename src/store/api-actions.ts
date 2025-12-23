@@ -82,7 +82,7 @@ export type FavoriteData = {
 };
 
 export const toggleFavoriteAction = createAsyncThunk<Offer, FavoriteData, AppThunkApiConfig>(
-  'favorite/toggle',
+  'favorites/toggle',
   async ({ offerId, status }, { extra: api }) => {
     const { data } = await api.post<Offer>(`/favorite/${offerId}/${status}`);
     return data;

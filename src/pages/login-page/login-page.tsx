@@ -6,8 +6,7 @@ import { selectAuthorizationStatus } from '../../store/selectors';
 import { loginAction } from '../../store/api-actions';
 import { changeCity } from '../../store/slices';
 import { AuthorizationStatus } from '../../types';
-
-const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+import { CITIES } from '../../const';
 
 const validatePassword = (value: string): boolean => {
   const hasLetter = /[a-zA-Z]/.test(value);
@@ -29,7 +28,7 @@ const LoginPage: React.FC = () => {
     return <Navigate to="/" />;
   }
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     if (!validatePassword(password)) {
@@ -61,7 +60,7 @@ const LoginPage: React.FC = () => {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" onSubmit={handleSubmit}>
+            <form className="login__form form" onSubmit={handleFormSubmit}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input

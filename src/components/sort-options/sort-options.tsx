@@ -10,7 +10,7 @@ type SortOptionsProps = {
 const SortOptions: React.FC<SortOptionsProps> = ({ activeSortOption, onChange }) => {
   const [isSortOpen, setIsSortOpen] = useState(false);
 
-  const handleToggle = useCallback(() => {
+  const handleSortToggleClick = useCallback(() => {
     setIsSortOpen((prev) => !prev);
   }, []);
 
@@ -25,7 +25,7 @@ const SortOptions: React.FC<SortOptionsProps> = ({ activeSortOption, onChange })
       <span
         className="places__sorting-type"
         tabIndex={0}
-        onClick={handleToggle}
+        onClick={handleSortToggleClick}
       >
         {activeSortOption}
         <svg className="places__sorting-arrow" width="7" height="4">

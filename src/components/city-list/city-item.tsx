@@ -3,21 +3,21 @@ import React, { memo, useCallback } from 'react';
 interface CityItemProps {
   city: string;
   isActive: boolean;
-  onClick: (city: string) => void;
+  onCityClick: (city: string) => void;
 }
 
-const CityItem: React.FC<CityItemProps> = memo(({ city, isActive, onClick }) => {
-  const handleClick = useCallback((e: React.MouseEvent) => {
+const CityItem: React.FC<CityItemProps> = memo(({ city, isActive, onCityClick }) => {
+  const handleCityClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    onClick(city);
-  }, [city, onClick]);
+    onCityClick(city);
+  }, [city, onCityClick]);
 
   return (
     <li className="locations__item">
       <a
         className={`locations__item-link tabs__item ${isActive ? 'tabs__item--active' : ''}`}
         href="#"
-        onClick={handleClick}
+        onClick={handleCityClick}
       >
         <span>{city}</span>
       </a>
