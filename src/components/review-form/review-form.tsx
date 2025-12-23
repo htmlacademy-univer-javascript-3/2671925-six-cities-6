@@ -12,6 +12,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ offerId }) => {
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const handleRatingChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setRating(Number(evt.target.value));
@@ -26,10 +27,15 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ offerId }) => {
 
     if (rating && review) {
       setIsSubmitting(true);
+      setError('');
       dispatch(postCommentAction({ offerId, comment: review, rating }))
+        .unwrap()
         .then(() => {
           setRating(0);
           setReview('');
+        })
+        .catch(() => {
+          setError('Failed to submit review. Please try again.');
         })
         .finally(() => {
           setIsSubmitting(false);
@@ -130,6 +136,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ offerId }) => {
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
+        {error && <p style={{ color: 'red', marginBottom: '10px' }}>{error}</p>}
         <button
           className="reviews__submit form__submit button"
           type="submit"

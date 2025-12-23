@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import Header from './Header';
+import Header from './header';
 import { userReducer, favoritesReducer } from '../../store/slices';
 import { AuthorizationStatus, UserData } from '../../types';
 

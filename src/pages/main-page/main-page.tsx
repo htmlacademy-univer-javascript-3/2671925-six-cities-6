@@ -2,12 +2,12 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCity, selectOffersByCity } from '../../store/selectors';
 import { changeCity } from '../../store/action';
-import OffersList from '../offers-list';
-import Map from '../map';
-import CityList from '../city-list';
-import SortOptions, { SortOption } from '../sort-options';
-import Header from '../header';
-import MainEmpty from '../main-empty';
+import OffersList from '../../components/offers-list';
+import Map from '../../components/map';
+import CityList from '../../components/city-list';
+import SortOptions, { SortOption } from '../../components/sort-options';
+import Header from '../../components/header';
+import MainEmpty from '../../components/main-empty';
 
 const CITY_LOCATIONS: Record<string, { name: string; location: { latitude: number; longitude: number; zoom: number } }> = {
   Amsterdam: {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
@@ -12,12 +12,12 @@ import {
 } from '../../store/selectors';
 import { AuthorizationStatus } from '../../types';
 import { fetchOfferAction, fetchNearbyOffersAction, fetchCommentsAction, toggleFavoriteAction } from '../../store/api-actions';
-import ReviewForm from '../review-form';
-import ReviewsList from '../reviews-list';
-import PlaceCard from '../place-card';
-import Map from '../map';
-import Header from '../header';
-import Spinner from '../spinner';
+import ReviewForm from '../../components/review-form';
+import ReviewsList from '../../components/reviews-list';
+import PlaceCard from '../../components/place-card';
+import Map from '../../components/map';
+import Header from '../../components/header';
+import Spinner from '../../components/spinner';
 
 const OfferPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,6 +30,13 @@ const OfferPage: React.FC = () => {
   const isOfferLoading = useSelector(selectIsOfferLoading);
   const isOfferNotFound = useSelector(selectIsOfferNotFound);
   const authorizationStatus = useSelector(selectAuthorizationStatus);
+
+  const mapOffers = useMemo(() => {
+    if (!offer) {
+      return nearbyOffers.slice(0, 3);
+    }
+    return [...nearbyOffers.slice(0, 3), offer];
+  }, [offer, nearbyOffers]);
 
   useEffect(() => {
     if (id) {
@@ -99,7 +106,7 @@ const OfferPage: React.FC = () => {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{width: `${offer.rating * 20}%`}}></span>
+                  <span style={{width: `${Math.round(offer.rating) * 20}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{offer.rating}</span>
@@ -159,7 +166,7 @@ const OfferPage: React.FC = () => {
             </div>
           </div>
           <section className="offer__map map">
-            <Map offers={nearbyOffers} city={offer.city} activeOfferId={offer.id} />
+            <Map offers={mapOffers} city={offer.city} activeOfferId={offer.id} />
           </section>
         </section>
         <div className="container">

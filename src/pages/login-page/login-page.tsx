@@ -9,6 +9,12 @@ import { AuthorizationStatus } from '../../types';
 
 const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
+const validatePassword = (value: string): boolean => {
+  const hasLetter = /[a-zA-Z]/.test(value);
+  const hasDigit = /\d/.test(value);
+  return hasLetter && hasDigit;
+};
+
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const authorizationStatus = useSelector(selectAuthorizationStatus);
@@ -17,6 +23,7 @@ const LoginPage: React.FC = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   if (authorizationStatus === AuthorizationStatus.Auth) {
     return <Navigate to="/" />;
@@ -25,6 +32,12 @@ const LoginPage: React.FC = () => {
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
+    if (!validatePassword(password)) {
+      setPasswordError('Password must contain at least one letter and one digit');
+      return;
+    }
+
+    setPasswordError('');
     if (email && password) {
       dispatch(loginAction({ email, password }));
     }
@@ -70,8 +83,12 @@ const LoginPage: React.FC = () => {
                   placeholder="Password"
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError('');
+                  }}
                 />
+                {passwordError && <p style={{ color: 'red', margin: '5px 0 0' }}>{passwordError}</p>}
               </div>
               <button className="login__submit form__submit button" type="submit">Sign in</button>
             </form>

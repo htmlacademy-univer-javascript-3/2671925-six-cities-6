@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import CityItem from './CityItem';
+import CityItem from './city-item';
 
 const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
